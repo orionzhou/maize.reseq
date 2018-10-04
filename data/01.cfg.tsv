@@ -1,0 +1,4 @@
+sid	study	author	source	readtype	stranded	meta	total	assigned	genotype	tissue
+hapmap2	hapmap2		sra	illumina	no					
+hapmap3	hapmap3		sra	illumina	no					
+widiv	widiv		local_interleaved	illumina	no					
