@@ -79,6 +79,7 @@ for (i in 1:nrow(th)) {
     system(cmd)
 }
 
+th = th %>% select(-fi, -fv)
 fo = sprintf("%s/05_read_list/%s.tsv", dird, sid)
 write_tsv(th, fo)
 #}}}
