@@ -1,8 +1,6 @@
-#{{{
-source("mr.fun.r")
-source("sra.R")
+source("functions.R")
+source(file.path(dirr,"sra.R"))
 t_cfg
-#}}}
 
 get_read_list <- function(ti) {
 #{{{
@@ -84,4 +82,33 @@ fo = sprintf("%s/05_read_list/%s.tsv", dird, sid)
 write_tsv(th, fo)
 #}}}
 
+#{{{ widiv
+sid = 'pc'
+fi = sprintf("%s/05_read_list/%s.raw.tsv", dird, sid)
+ti = read_tsv(fi)
+diri = '/home/springer/shared/pcrisp/mutants_for_SNPs'
+th1 = ti %>%
+    transmute(SampleID = sid, Treatment = note, 
+              fi1 = file.path(diri, fq1), fi2 = file.path(diri, fq2),
+              fv = file.exists(fi1) && file.exists(fi2)) %>%
+    mutate(Genotype = 'B73', Tissue = '', Replicate = 1, paired = T) %>%
+    select(SampleID, Tissue, Genotype, Treatment, Replicate, paired, fi1, fi2, fv)
+th1 %>% count(fv)
+th = th1
+
+diro = sprintf("%s/cache/%s/10_fastq", dird, sid)
+if(!file.exists(diro)) system(sprintf("mkdir -p %s", diro))
+for (i in 1:nrow(th)) {
+    fl1 = sprintf("%s/%s_1.fq.gz", diro, th$SampleID[i])
+    fl2 = sprintf("%s/%s_2.fq.gz", diro, th$SampleID[i])
+    cmd = sprintf("ln -sf %s %s", th$fi1[i], fl1)
+    system(cmd)
+    cmd = sprintf("ln -sf %s %s", th$fi2[i], fl2)
+    system(cmd)
+}
+
+th = th %>% select(-fi1, -fi2, -fv)
+fo = sprintf("%s/05_read_list/%s.tsv", dird, sid)
+write_tsv(th, fo)
+#}}}
 

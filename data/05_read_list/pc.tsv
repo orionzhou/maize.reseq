@@ -1,0 +1,3 @@
+SampleID	Tissue	Genotype	Treatment	Replicate	paired
+pc01		bladeless		1	TRUE
+pc02		small_spikey		1	TRUE

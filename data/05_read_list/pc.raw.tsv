@@ -1,0 +1,3 @@
+sid	note	fq1	fq2
+pc01	bladeless	bladeless_R1_001.fastq.gz	bladeless_R2_001.fastq.gz
+pc02	small_spikey	small_spikey_R1_001.fastq.gz	small_spikey_R2_001.fastq.gz

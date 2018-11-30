@@ -2,3 +2,4 @@ sid	study	author	source	readtype	stranded	meta	total	assigned	genotype	tissue	re
 hmp2	hapmap2		sra	illumina	no						B73	bwa
 hmp3	hapmap3		sra	illumina	no						B73	bwa
 widiv	widiv		local_interleaved	illumina	no						B73	bwa
+hc	methylation mutant	pcrisp	local	illumina	no						B73	bwa
