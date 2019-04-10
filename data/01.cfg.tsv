@@ -1,5 +1,7 @@
-sid	study	author	source	readtype	stranded	meta	total	assigned	genotype	tissue	reference	mapper
-hmp2	hapmap2		sra	illumina	no						B73	bwa
-hmp3	hapmap3		sra	illumina	no						B73	bwa
-widiv	widiv		local_interleaved	illumina	no						B73	bwa
-hc	methylation mutant	pcrisp	local	illumina	no						B73	bwa
+yid	study	author	source	stranded	readtype	meta	n	reference	mapper	done	run
+hmp2	hapmap2		sra	no	illumina		103	B73	bwa	T	
+hmp3	hapmap3		sra	no	illumina		598	B73	bwa	T	
+m282	282 set		sra	no	illumina		277	B73	bwa		
+biomap	biomap		local_interleaved	no	illumina		60	B73	bwa	T	
+pc	methylation mutant	pcrisp	local	no	illumina		2	B73	bwa	T	
+j01			sra	no	illumina	T	123	B73	bwa		T
