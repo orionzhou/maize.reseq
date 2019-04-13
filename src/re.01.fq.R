@@ -156,3 +156,22 @@ fo = sprintf("%s/05_read_list/%s.tsv", dird, yid)
 write_tsv(to, fo)
 #}}}
 
+#{{{ j02 - all
+yids = c('biomap', 'hmp2', 'hmp3')
+fis = sprintf("%s/05_read_list/%s.tsv", dird, yids)
+ti = tibble(yid=yids, fi=fis) %>%
+    mutate(data = map(fi, read_tsv)) %>%
+    select(yid, data) %>%
+    unnest() %>%
+    distinct(yid, Genotype) %>%
+    mutate(gt=Genotype, sid=sprintf("%s_%s", yid, gt)) %>%
+    select(sid,yid,gt)
+
+to = ti %>%
+    select(SampleID = sid, yid, Genotype = gt)
+yid = 'j02'
+fo = sprintf("%s/05_read_list/%s.tsv", dird, yid)
+write_tsv(to, fo)
+#}}}
+
+
