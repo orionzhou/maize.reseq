@@ -11,7 +11,7 @@ if(yid == 'hmp2') {
                   Genotype = SampleName,
                   Treatment = '',
                   Replicate = '',
-                  paired = paired) %>%
+                  paired = paired, spots = spots, avgLength = avgLength) %>%
         arrange(SampleID)
     #}}}
 } else if(yid == 'hmp3') {
@@ -23,7 +23,8 @@ if(yid == 'hmp2') {
                   Genotype = Genotype,
                   Treatment = '',
                   Replicate = '',
-                  paired = paired)
+                  paired = paired, spots = spots, avgLength = avgLength) %>%
+        arrange(SampleID)
     #}}}
 } else if(yid == 'm282') {
     #{{{ 282set
@@ -33,7 +34,7 @@ if(yid == 'hmp2') {
                   Genotype = str_sub(SampleName,8),
                   Treatment = '',
                   Replicate = '',
-                  paired = paired) %>%
+                  paired = paired, spots = spots, avgLength = avgLength) %>%
         arrange(SampleID)
     #}}}
 } else if(yid == 'gem31') {
@@ -44,7 +45,7 @@ if(yid == 'hmp2') {
                   Genotype = str_sub(SampleName,4),
                   Treatment = '',
                   Replicate = '',
-                  paired = paired) %>%
+                  paired = paired, spots = spots, avgLength = avgLength) %>%
         arrange(SampleID)
     #}}}
 } else if(yid == 'cs845') {
@@ -58,7 +59,7 @@ if(yid == 'hmp2') {
                   Genotype = idx,
                   Treatment = SampleName,
                   Replicate = '',
-                  paired = paired) %>%
+                  paired = paired, spots = spots, avgLength = avgLength) %>%
         arrange(SampleID)
     #}}}
 } else {
@@ -69,10 +70,11 @@ th
 #}}}
 }
 
+yid = 'cs845'
+yid = 'hmp2'
 yid = 'hmp3'
 yid = 'm282'
 yid = 'gem31'
-yid = 'cs845'
 fi = sprintf("%s/03_sra_list/%s.csv", dird, yid)
 fi2 = sprintf("%s/03_sra_list/%s_exp.csv", dird, yid)
 ti = read_sra_run(fi, fi2)
@@ -99,14 +101,15 @@ ti = ti %>% fill(directory) %>%
     mutate(nf1 = sprintf("%s/%s.fq.gz", diro1, SampleID)) %>%
     mutate(f1 = normalizePath(f1), nf1 = normalizePath(nf1)) %>%
     mutate(cmd = sprintf("ln -sf %s %s", f1, nf1)) %>%
-    mutate(tag = file.exists(f1))
+    mutate(tag = file.exists(f1)) %>%
+    mutate(avgLength = 502)
 sum(!ti$tag)
 
 #map_int(ti$cmd, system)
 
-th = ti %>% select(SampleID, Genotype, r0=f1) %>%
+th = ti %>% select(SampleID, Genotype, r0=f1, avgLength) %>%
     mutate(Tissue='', Treatment='', Replicate = '', paired = T) %>%
-    select(SampleID, Tissue, Genotype, Treatment, Replicate, paired, r0)
+    select(SampleID, Tissue, Genotype, Treatment, Replicate, paired, r0, avgLength)
 th = sra_fill_replicate(th)
 th %>% count(Genotype) %>% print(n=20)
 fo = sprintf("%s/05_read_list/%s.tsv", dird, yid)
