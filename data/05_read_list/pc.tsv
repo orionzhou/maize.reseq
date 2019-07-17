@@ -1,3 +1,0 @@
-SampleID	Tissue	Genotype	Treatment	Replicate	paired	r1	r2
-pc		bladeless	bladeless	1	TRUE	/home/springer/shared/pcrisp/mutants_for_SNPs/bladeless_R1_001.fastq.gz	/home/springer/shared/pcrisp/mutants_for_SNPs/bladeless_R2_001.fastq.gz
-pc		small_spikey	small_spikey	1	TRUE	/home/springer/shared/pcrisp/mutants_for_SNPs/small_spikey_R1_001.fastq.gz	/home/springer/shared/pcrisp/mutants_for_SNPs/small_spikey_R2_001.fastq.gz

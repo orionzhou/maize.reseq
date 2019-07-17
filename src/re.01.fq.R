@@ -135,46 +135,6 @@ fo = sprintf("%s/05_read_list/%s.tsv", dird, yid)
 write_tsv(th, fo)
 #}}}
 
-#{{{ j01
-yids = c('biomap', 'hmp2', 'hmp3')
-fis = sprintf("%s/05_read_list/%s.tsv", dird, yids)
-ti = tibble(yid=yids, fi=fis) %>%
-    mutate(data = map(fi, read_tsv)) %>%
-    select(yid, data) %>%
-    unnest() %>%
-    distinct(yid, Genotype) %>%
-    mutate(gt=Genotype, sid=sprintf("%s_%s", yid, gt)) %>%
-    select(sid,yid,gt)
 
-ptn_gt = '(b73)|(mo17)|(w22$)|(ph207)|(b84)|(a682)'
-
-ti1 = ti %>% filter(yid == yids[1])
-ti2 = ti %>% filter(yid == yids[2], str_detect(str_to_lower(gt), ptn_gt))
-ti3 = ti %>% filter(yid == yids[3], str_detect(str_to_lower(gt), ptn_gt) | gt %in% ti1$gt)
-
-to = rbind(ti1,ti2,ti3) %>%
-    select(SampleID = sid, yid, Genotype = gt)
-yid = 'j01'
-fo = sprintf("%s/05_read_list/%s.tsv", dird, yid)
-write_tsv(to, fo)
-#}}}
-
-#{{{ j02 - all
-yids = c('biomap', 'hmp2', 'hmp3')
-fis = sprintf("%s/05_read_list/%s.tsv", dird, yids)
-ti = tibble(yid=yids, fi=fis) %>%
-    mutate(data = map(fi, read_tsv)) %>%
-    select(yid, data) %>%
-    unnest() %>%
-    distinct(yid, Genotype) %>%
-    mutate(gt=Genotype, sid=sprintf("%s_%s", yid, gt)) %>%
-    select(sid,yid,gt)
-
-to = ti %>%
-    select(SampleID = sid, yid, Genotype = gt)
-yid = 'j02'
-fo = sprintf("%s/05_read_list/%s.tsv", dird, yid)
-write_tsv(to, fo)
-#}}}
 
 
