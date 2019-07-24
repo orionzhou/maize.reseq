@@ -32,35 +32,46 @@ ggsave(p1, file=fo, width=15, height=70, limitsize=F)
 
 #{{{
 yid = 'ph01'
-dirw = file.path(dird, 'raw', yid)
+dirw = file.path(dird, '11_qc', yid)
+diri = file.path(dird, 'raw', yid)
 fi = file.path(dirw, '35.treefile')
 tree = read.newick(fi)
 
-fi = '~/projects/reseq/data/raw/j01/38.stat.tsv'
-tt = read_tsv(fi, skip=1) %>%
-    select(sid=`[3]sample`, avgDepth=`[10]average depth`)
+th = t_cfg %>% select(study=alias, yid) %>% filter(!is.na(study))
+ft = '~/projects/reseq/data/21_qc/j01/01.bcfstats.tsv'
+tt = read_tsv(ft) %>% inner_join(th, by='study') %>%
+    mutate(taxa = str_c(yid, genotype, sep='_'))
 
-gts = c('all','b73','mo17','w22','ph207','x')
-gt_col = c('black',pal_locuszoom()(length(gts)-1))
+gts = c('all','h')
+gt_col = c('black',pal_nejm()(1))
 names(gt_col) = gts
 tp = tibble(taxa = tree$tip.label) %>%
-    mutate(id = taxa) %>%
-    left_join(tt, by=c('taxa'='sid')) %>%
-    mutate(lab = sprintf("%s [%4.01fx]", taxa, avgDepth)) %>%
+    left_join(tt, by='taxa') %>%
+    mutate(lab = sprintf("%s  %4.01fx", genotype, avgDepth)) %>%
     mutate(gt = 'all') %>%
-    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'b73'), 'b73', gt)) %>%
-    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'mo17'), 'mo17', gt)) %>%
-    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'w22$'), 'w22', gt)) %>%
-    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'ph207'), 'ph207', gt)) %>%
+    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'b73'), 'h', gt)) %>%
+    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'mo17'), 'h', gt)) %>%
+    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'w22$'), 'h', gt)) %>%
+    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'ph207'), 'h', gt)) %>%
+    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'oh43'), 'h', gt)) %>%
+    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'phb47'), 'h', gt)) %>%
+    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'a682'), 'h', gt)) %>%
+    mutate(gt = ifelse(str_detect(str_to_lower(taxa), 'b84'), 'h', gt)) %>%
     mutate(col = gt_col[gt])
 #
+studies = unique(tp$study)
+st_col = pal_aaas()(5)
+names(st_col) = studies
 p1 = ggtree(tree) %<+%
     tp +
-    geom_tiplab(aes(label=lab,col=gt), size=2.5, hjust=0, align=T, linesize=.5) +
+    geom_tiplab(aes(label=study,col=study), size=2.5, hjust=0, align=T, linesize=.5) +
+    geom_tiplab(aes(label=lab,col=gt), size=2.5, hjust=0, align=T, linesize=.5, offset=.012, linetype='blank') +
     #geom_text(aes(label=avgDepth), size=2.5, hjust=0, align=T, linesize=.5) +
-    scale_color_manual(values=gt_col) +
-    scale_x_continuous(expand=expand_scale(mult=c(0,.2))) +
+    scale_color_manual(values=c(gt_col, st_col)) +
+    scale_x_continuous(expand=expand_scale(mult=c(0,.3))) +
     scale_y_continuous(expand=c(0,1))
-fo = file.path(dirw, '36.pdf')
-ggsave(p1, file=fo, width=8, height=10, limitsize=F)
+fo = file.path(dirw, '05.pdf')
+ggsave(p1, file=fo, width=8, height=35, limitsize = F)
 #}}}
+
+
