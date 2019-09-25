@@ -1,4 +1,5 @@
 source("functions.R")
+require(ape)
 require(treeio)
 require(ggtree)
 require(tidytree)
@@ -30,7 +31,7 @@ fo = file.path(dirw, '25.pdf')
 ggsave(p1, file=fo, width=15, height=70, limitsize=F)
 #}}}
 
-#{{{
+#{{{ ph01
 yid = 'ph01'
 dirw = file.path(dird, '11_qc', yid)
 diri = file.path(dird, 'raw', yid)
@@ -74,4 +75,45 @@ fo = file.path(dirw, '05.pdf')
 ggsave(p1, file=fo, width=8, height=35, limitsize = F)
 #}}}
 
+#{{{ ph05
+yid = 'ph05'
+dirw = file.path(dird, '11_qc', yid)
+diri = file.path(dird, 'raw', yid)
+fi = file.path(diri, '35.nwk')
+tree = read.newick(fi)
+
+th = t_cfg %>% select(study=alias, yid) %>% filter(!is.na(study))
+ft = '~/projects/reseq/data/21_qc/j01/01.bcfstats.tsv'
+tt = read_tsv(ft) %>% inner_join(th, by='study') %>%
+    mutate(taxa = str_c(yid, genotype, sep='_'))
+
+gts = c('all','NAM','main')
+gt_col = c('black',pal_nejm()(2)[2],pal_aaas()(2)[2])
+names(gt_col) = gts
+gt_map = c('KI3'="Ki3", 'MO18W'='Mo18W', 'OH7B'="Oh7B")
+tp = tibble(taxa = tree$tip.label) %>%
+    left_join(tt, by='taxa') %>%
+    mutate(genotype=ifelse(genotype %in% names(gt_map), gt_map[genotype], genotype)) %>%
+    mutate(lab = sprintf("%s  %4.01fx", study, avgDepth)) %>%
+    mutate(gt = 'all') %>%
+    mutate(gt = ifelse(genotype %in% gts_nam25, 'NAM', gt)) %>%
+    mutate(gt = ifelse(genotype %in% gts_main, 'main', gt)) %>%
+    mutate(col = gt_col[gt])
+#
+studies = unique(tp$study)
+st_col = pal_aaas()(5)
+names(st_col) = studies
+tree2 = root(tree, which(tree$tip.label == "dn14a_Teosinte"))
+p1 = ggtree(tree2) %<+%
+    tp +
+    geom_nodelab(size=2,hjust=0) +
+    geom_tiplab(aes(label=genotype,col=gt), size=2.5, hjust=0, align=T, linesize=.5) +
+    geom_tiplab(aes(label=lab), size=2.5, hjust=0, align=T, linesize=.5, offset=.06, linetype='blank') +
+    #geom_text(aes(label=avgDepth), size=2.5, hjust=0, align=T, linesize=.5) +
+    scale_color_manual(values=c(gt_col)) +
+    scale_x_continuous(expand=expand_scale(mult=c(0,.15))) +
+    scale_y_continuous(expand=c(0,1))
+fo = file.path(dirw, '05.pdf')
+ggsave(p1, file=fo, width=7, height=9, limitsize = F)
+#}}}
 

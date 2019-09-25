@@ -1,8 +1,8 @@
 source("functions.R")
-t_cfg
+t_cfg %>% filter(libtype=='dnaseq')
 
-#{{{ collect vcf stats
-yids = c('dn12a','dn14a','dn17a','dn17b','dn18a')
+#{{{ collect all vcf stats
+yids = c('dn12a','dn14a','dn15a','dn17a','dn17b','dn18a')
 th = t_cfg %>% filter(yid %in% yids) %>%
     select(yid,author,study,n)
 
@@ -30,11 +30,24 @@ ti %>% group_by(yid,study,n) %>%
     summarise(d5 = sum(avgDepth>=5)) %>%
     ungroup()
 
-
+#{{{ j01: 5 studies
 yid = 'j01'
+yids = c('dn12a','dn14a','dn17a','dn17b','dn18a')
 fo = sprintf("%s/11_geno_list/%s.tsv", dird, yid)
-to = ti %>% filter(avgDepth>=5) %>%
+to = ti %>% filter(yid %in% yids, avgDepth>=5) %>%
     separate(sid, c("yid",'gt'), sep='#', remove=F) %>%
     select(sid, yid, gt)
 write_tsv(to, fo)
+#}}}
+
+#{{{ j08: 7 studies
+yid = 'j08'
+yids = c('dn12a','dn14a','dn15a','dn17a','dn17b','dn18a','dn19a')
+fo = sprintf("%s/11_geno_list/%s.tsv", dird, yid)
+to = ti %>% filter(yid %in% yids, avgDepth>=5) %>%
+    separate(sid, c("yid",'gt'), sep='#', remove=F) %>%
+    select(sid, yid, gt)
+write_tsv(to, fo)
+#}}}
+
 

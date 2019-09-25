@@ -1,4 +1,5 @@
 # Whole genome re-sequencing analysis code and data
-This repo provides a collection of whole genome re-sequencing (mostly maize) datasets and analysis code.
 
-Check [this table](/data/01.cfg.tsv) for a list of collected datasets.
+This repository serves as a collection of whole genome re-sequencing (mostly maize) datasets and analysis code.
+
+- [Check here](/data/08.vcfstats.tsv) for the list of (maize) genotypes characterized.
