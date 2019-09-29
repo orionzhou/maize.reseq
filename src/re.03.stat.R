@@ -2,7 +2,7 @@ source("functions.R")
 t_cfg %>% filter(libtype=='dnaseq')
 
 #{{{ collect all vcf stats
-yids = c('dn12a','dn14a','dn15a','dn17a','dn17b','dn18a')
+yids = c('dn12a','dn14a','dn15a','dn17a','dn17b','dn18a','dn19a')
 th = t_cfg %>% filter(yid %in% yids) %>%
     select(yid,author,study,n)
 
@@ -40,13 +40,14 @@ to = ti %>% filter(yid %in% yids, avgDepth>=5) %>%
 write_tsv(to, fo)
 #}}}
 
-#{{{ j08: 7 studies
-yid = 'j08'
+#{{{ j07: 7 studies
+yid = 'j07'
 yids = c('dn12a','dn14a','dn15a','dn17a','dn17b','dn18a','dn19a')
 fo = sprintf("%s/11_geno_list/%s.tsv", dird, yid)
 to = ti %>% filter(yid %in% yids, avgDepth>=5) %>%
     separate(sid, c("yid",'gt'), sep='#', remove=F) %>%
     select(sid, yid, gt)
+to %>% count(yid)
 write_tsv(to, fo)
 #}}}
 
