@@ -87,7 +87,7 @@ to = ti2 %>%
     filter(! key %in% c("samples")) %>%
     mutate(key = factor(key, levels = keys)) %>%
     spread(key, value) %>%
-    arrange(inbred, Genotype)
+    arrange(-inbred, Genotype)
 
 fo = sprintf("%s/35_vnt_ase/%s.stats.tsv", dird, yid)
 write_tsv(to, fo, na='')
