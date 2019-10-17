@@ -37,4 +37,58 @@ fo = sprintf("%s/35_vnt_ase/%s.tsv", dird, yid)
 write_tsv(tp, fo, na='')
 #}}}
 
+read.bcftools.stats <- function(filename, sections = c("ID", "SN", "TSTV", "SiS", "AF", "QUAL", "IDD", "ST", "DP", 'PSC', 'PSI', "label")) {
+    #{{{
+    con <- file(filename, open = "r")
+    lines <- readLines(con)
+    obj <- list()
+    # Loop the labels and convert to data frames
+    for (x in sections) {
+        if (x == "label") next
+        header <- gsub("\\[[0-9]+\\]", "", unlist(strsplit(gsub("# ", "", lines[min(grep(paste(x, "\\t", sep=""), lines))]), "\t")))
+        obj[[x]] <- read.delim(tc <- textConnection(lines[grepl(paste(x, "\\t", sep = ""), lines)]),
+                                                              header = FALSE, skip = 1, col.names = header) %>% as_tibble()
+        close(tc)
+        obj[[x]][x] <- NULL
+    }
+    close(con)
+    obj
+    #}}}
+}
+
+merge.bcftools.stats <- function(ti, sections = c("ID", "SN", "TSTV", "SiS", "AF", "QUAL", "IDD", "ST", "DP", 'PSC', 'PSI', "label")) {
+    #{{{
+    obj <- list()
+    for (x in names(ti$data[[1]])) {
+        obj[[x]] = ti %>% mutate(data2 = map(data, x)) %>%
+            select(rid, data2) %>% unnest()
+    }
+    obj
+    #}}}
+}
+
+#{{{ vcf stats
+yid = 'vt01'
+fi = sprintf("%s/35_vnt_ase/%s.tsv", dird, yid)
+ti = read_tsv(fi)
+ti2 = ti %>%
+    mutate(fs = sprintf("~/projects/reseq/data/ase_vcf/%s.txt", Genotype)) %>%
+    filter(file.exists(fs)) %>%
+    mutate(res = map(fs, read.bcftools.stats))
+
+keys = c('records', 'no_ALTs', 'SNPs', 'indels', 'MNPs', 'others', 'multiallelic', 'multiallelic_SNP')
+to = ti2 %>%
+    mutate(x = map(res, 'SN')) %>% select(-fs, -res) %>% unnest() %>%
+    select(-id) %>%
+    mutate(key = str_replace(key, "^number of ", '')) %>%
+    mutate(key = str_replace(key, ": *", '')) %>%
+    mutate(key = str_replace(key, " sites$", '')) %>%
+    mutate(key = str_replace(key, "[ -]", '_')) %>%
+    filter(! key %in% c("samples")) %>%
+    mutate(key = factor(key, levels = keys)) %>%
+    spread(key, value)
+
+fo = sprintf("%s/35_vnt_ase/%s.stats.tsv", dird, yid)
+write_tsv(to, fo, na='')
+#}}}
 

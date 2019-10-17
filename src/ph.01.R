@@ -1,7 +1,7 @@
 source("functions.R")
 dird = "~/projects/reseq/phylo"
 diro = file.path(dird, '05_sample_list')
-fi = file.path(dird, '../data/11_geno_list/j01.tsv')
+fi = file.path(dird, '../data/11_geno_list/j07.tsv')
 ti = read_tsv(fi)
 
 #{{{ ph01
@@ -13,7 +13,8 @@ write(to$sid, fo)
 
 #{{{ ph05
 yid = 'ph05'
-gts_x = c('B73','Mo17','W22','Ph207','PHB47','A682','B84')
+gts_x = c('B73','Mo17','W22','Ph207','PHB47','A682','B84','Teosinte',
+          'W64A','H84','H99','Oh43')
 ft = file.path(dird, '../data/08.vcfstats.tsv')
 tt = read_tsv(ft)
 
@@ -29,6 +30,4 @@ to  = ti %>%
 fo = sprintf("%s/%s.txt", diro, yid)
 write(to$sid, fo)
 #}}}
-
-
 

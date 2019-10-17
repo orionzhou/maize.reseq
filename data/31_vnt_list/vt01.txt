@@ -2,12 +2,13 @@ dn18a#3IIH6
 dn18a#A188
 dn17a#A682
 dn18a#AS5707
-dn14a#B73
+dn17a#B37
+dn19a#B73
 dn18a#B84
 dn17a#B97
 dn14a#CH10
 dn17b#CML103
-dn17a#CML228
+dn19a#CML228
 dn17b#CML247
 dn17b#CML277
 dn17b#CML322
@@ -36,7 +37,9 @@ dn14a#F7
 dn14a#F98902
 dn18a#FBLL
 dn14a#FF0721H-7
-dn17b#HP301
+dn17a#H84
+dn15a#H99
+dn15a#HP301
 dn17a#Il14H
 dn17b#Ki11
 dn17b#KI3
@@ -113,3 +116,4 @@ dn18a#W37A
 dn18a#W604S
 dn18a#W605S
 dn18a#W606S
+dn12a#W64A
