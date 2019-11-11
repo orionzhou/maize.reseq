@@ -5,4 +5,4 @@ This repository serves as a collection of whole genome re-sequencing (mostly mai
 - [Check here](/data/08.vcfstats.tsv) for the list of (maize) genotypes characterized.
 - [Phylogeny](/phylo/11_qc/ph01/05.pdf) of ~400 maize genotypes
 - [Phylogeny](/phylo/11_qc/ph05/05.pdf) of ~120 deep sequenced lines
-- [High quality variant calls](/data/35_vnt_ase/vt01.stats.tsv) for ~40 deep sequenced inbred and ~100 hybrid lines
+- [High quality variant calls](/data/35_vnt_ase/vt01.stats.tsv) for ~100 deep sequenced inbred and ~120 hybrid lines
