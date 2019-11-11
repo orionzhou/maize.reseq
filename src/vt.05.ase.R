@@ -16,7 +16,8 @@ diri = '~/projects/barn/data/15_read_list'
 tg = t_ase %>% mutate(fi = sprintf("%s/%s.tsv", diri, yid)) %>%
     mutate(data=map(fi, read_tsv)) %>%
     select(yid, data) %>% unnest() %>%
-    distinct(yid, Genotype)
+    distinct(yid, Genotype) %>%
+    add_row(yid = 'rn18c',Genotype = 'W22xTeosinte')
 
 to = tg %>% mutate(inbred = !str_detect(Genotype, 'x'))
 to1 = to %>% filter(inbred) %>% mutate(Genotype=str_to_upper(Genotype)) %>%
@@ -30,6 +31,7 @@ to2 = to %>% filter(!inbred) %>%
 to1 %>% filter(is.na(sid)) %>% print(n=40)
 to2 %>% filter(is.na(sid1) | is.na(sid2)) %>% print(n=40)
 tp1 = to1 %>% filter(!is.na(sid)) %>% distinct(Genotype, inbred, sid)
+tp1 = ti %>% mutate(Genotype=str_to_upper(Genotype), inbred=T) %>% select(Genotype,inbred, sid)
 tp2 = to2 %>% filter(!is.na(sid1) & !is.na(sid2)) %>% distinct(Genotype, inbred, sid1, sid2)
 tp = tp1 %>% bind_rows(tp2)
 

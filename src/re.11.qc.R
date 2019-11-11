@@ -2,7 +2,7 @@ source("functions.R")
 dirw = file.path(dird, '21_qc')
 t_cfg
 
-yid = 'j01'
+yid = 'j07'
 fi = file.path(dird, 'raw', yid, 'bcftools_stats.rds')
 ti = readRDS(fi)
 

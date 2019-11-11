@@ -51,4 +51,13 @@ to %>% count(yid)
 write_tsv(to, fo)
 #}}}
 
+tg = ti %>% select(study,sid,avgDepth) %>% separate(sid, c('sid','gt'), sep='#')
+fe = '~/projects/barn/data/15_read_list/rn18a.tsv'
+te = read_tsv(fe)
+gts = te$Genotype %>% unique() %>% str_to_upper()
 
+sum(gts %in% str_to_upper(tg$gt))
+
+tg %>% mutate(gt = str_to_upper(gt)) %>%
+	filter(gt %in% gts) %>%
+	count(sid)
