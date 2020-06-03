@@ -1,8 +1,6 @@
 source("functions.R")
 dird = "~/projects/reseq/data"
 f_cfg = '~/projects/master.xlsx'
-t_ase = read_xlsx(f_cfg, sheet='barn', col_names=T) %>%
-    replace_na(list(ase=F)) %>% filter(ase=='T')
 
 #{{{
 yid = 'vt01'
@@ -12,10 +10,11 @@ ti = read_tsv(fi, col_names=c('sid')) %>%
     separate(sid, c('yid','Genotype'), sep="#", remove=F) %>%
     mutate(Genotype=str_to_upper(Genotype)) %>% select(-yid)
 
+yids = c('ca20a3','rn14f','rn17b','rn17c','rn18b','rn18g','rn20a','rn20b','rn20d3','rn20e')
 diri = '~/projects/barn/data/15_read_list'
-tg = t_ase %>% mutate(fi = sprintf("%s/%s.tsv", diri, yid)) %>%
+tg = tibble(yid=yids) %>% mutate(fi = sprintf("%s/%s.tsv", diri, yid)) %>%
     mutate(data=map(fi, read_tsv)) %>%
-    select(yid, data) %>% unnest() %>%
+    select(yid, data) %>% unnest(data) %>%
     distinct(yid, Genotype) %>%
     add_row(yid = 'rn18c',Genotype = 'W22xTeosinte')
 

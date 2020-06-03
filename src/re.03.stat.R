@@ -51,6 +51,30 @@ to %>% count(yid)
 write_tsv(to, fo)
 #}}}
 
+#{{{ j08: only ASE genotypes
+gts_x = c('B73','Mo17','W22','Ph207','PHB47','A682','B84','Teosinte',
+          'W64A','H84','H99','Oh43','B37')
+gts = c(gts_nam25, gts_x, gts_biomap)
+to  = ti %>% select(sid, avgDepth) %>%
+    separate(sid, c('yid','gt'), sep='#', remove=F) %>%
+    mutate(gt = str_to_upper(gt)) %>%
+    filter(gt %in% str_to_upper(gts) | yid %in% c('dn14a','dn18a')) %>%
+    group_by(gt) %>%
+    arrange(-avgDepth) %>%
+    summarise(sid=sid[1], avgDepth=avgDepth[1]) %>% ungroup() %>%
+    separate(sid, c('yid','gt'), sep="#", remove=F) %>%
+    select(sid, yid, gt, avgDepth)
+to %>% count(yid)
+#to %>% filter(yid %in% c("dn14a",'dn15a','dn19a')) %>% print(n=50)
+
+yid = 'j08'
+fo = sprintf("%s/11_geno_list/%s.tsv", dird, yid)
+write_tsv(to, fo)
+#}}}
+
+
+
+#{{{ # check rn18a - m282
 tg = ti %>% select(study,sid,avgDepth) %>% separate(sid, c('sid','gt'), sep='#')
 fe = '~/projects/barn/data/15_read_list/rn18a.tsv'
 te = read_tsv(fe)
@@ -61,3 +85,5 @@ sum(gts %in% str_to_upper(tg$gt))
 tg %>% mutate(gt = str_to_upper(gt)) %>%
 	filter(gt %in% gts) %>%
 	count(sid)
+#}}}
+
